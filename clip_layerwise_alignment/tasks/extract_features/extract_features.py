@@ -10,7 +10,7 @@ import torch.nn as nn
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from clip_layerwise_alignments.colab import retrieve_and_unzip_data
+from clip_layerwise_alignment.colab import retrieve_and_unzip_data
 
 from .flickr30k import (
     _extract_flickr30k_img_features,

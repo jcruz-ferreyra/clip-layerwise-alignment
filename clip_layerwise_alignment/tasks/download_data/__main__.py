@@ -2,15 +2,15 @@
 
 from pathlib import Path
 
-from clip_layerwise_alignments.config import LOCAL_DATA_DIR, DRIVE_DATA_DIR
-from clip_layerwise_alignments.utils import check_missing_keys, load_config, setup_logging
+from clip_layerwise_alignment.config import LOCAL_DATA_DIR, DRIVE_DATA_DIR
+from clip_layerwise_alignment.utils import check_missing_keys, load_config, setup_logging
 
 # Setup logging
 script_name = Path(__file__).parent.name
 logger = setup_logging(script_name, LOCAL_DATA_DIR)
 
 # Import task components
-from clip_layerwise_alignments.tasks.download_data import (
+from clip_layerwise_alignment.tasks.download_data import (
     DownloadDataContext,
     download_data,
 )

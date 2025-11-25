@@ -2,8 +2,8 @@
 
 from pathlib import Path
 
-from clip_layerwise_alignments.config import DRIVE_DATA_DIR, LOCAL_DATA_DIR
-from clip_layerwise_alignments.utils import (
+from clip_layerwise_alignment.config import DRIVE_DATA_DIR, LOCAL_DATA_DIR
+from clip_layerwise_alignment.utils import (
     check_missing_keys,
     load_config,
     setup_logging,
@@ -14,7 +14,7 @@ script_name = Path(__file__).parent.name
 logger = setup_logging(script_name, LOCAL_DATA_DIR)
 
 # Import task components
-from clip_layerwise_alignments.tasks.extract_features import (
+from clip_layerwise_alignment.tasks.extract_features import (
     ExtractFeaturesContext,
     extract_features,
 )
