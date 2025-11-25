@@ -1,0 +1,10 @@
+# tasks/download_data/config.yaml
+
+# Which datasets to download
+datasets:
+  - flickr30k
+  # - imagenet100  # not yet implemented
+  # - coco  # not yet implemented
+
+# Storage location
+output_storage: "drive"  # "local" or "drive"

@@ -1,0 +1,21 @@
+# tasks/extract_features/config.yaml
+
+model_name: "ViT-B-32"
+pretrained: "openai"
+
+# Which layers to extract (0-indexed internally)
+text_layers: [1, 3, 6, 9, 12]      # Extract these intermediate layers
+image_layers: [1, 3, 6, 9, 12]     # Extract these intermediate layers
+
+extract_text_final: true           # Also extract final text embedding after ln_norm
+extract_image_final: true          # Also extract final image embedding after ln_norm
+
+# Data
+input_dataset: "flickr30k"
+splits: ["train", "test"]
+
+# Processing
+batch_size: 16
+device: "cpu"
+
+environment: "colab"
