@@ -168,8 +168,6 @@ def _extract_flickr30k_img_features(
             batch["imgid"].tolist() if torch.is_tensor(batch["imgid"]) else batch["imgid"]
         )
 
-        break
-
     # Step 5: Concatenate batches into single tensors
     logger.info("Concatenating image features across batches...")
     for layer_name in all_features:
@@ -253,8 +251,6 @@ def _extract_flickr30k_txt_features(
         metadata["imgids"].extend(
             batch["imgid"].tolist() if torch.is_tensor(batch["imgid"]) else batch["imgid"]
         )
-
-        break
 
     # Step 5: Concatenate batches into single tensors
     logger.info("Concatenating text features across batches...")

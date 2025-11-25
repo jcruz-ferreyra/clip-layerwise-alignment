@@ -28,7 +28,6 @@ def _get_drive_mount_point(drive_path: Path) -> Path:
 load_dotenv()
 
 # Base paths
-HOME_DIR = Path(os.getenv("HOME_DIR")).resolve()
 LOCAL_DIR = Path(os.getenv("LOCAL_DIR")).resolve()
 
 # Folder names
@@ -40,7 +39,7 @@ LOCAL_DATA_DIR = LOCAL_DIR / DATA_FOLDER
 LOCAL_MODELS_DIR = LOCAL_DIR / MODELS_FOLDER
 
 # Validate local paths exist
-for path_name, path in [("HOME_DIR", HOME_DIR), ("LOCAL_DIR", LOCAL_DIR)]:
+for path_name, path in [("LOCAL_DIR", LOCAL_DIR)]:
     if not path.exists():
         raise ValueError(f"{path_name} path '{path}' from .env does not exist.")
 

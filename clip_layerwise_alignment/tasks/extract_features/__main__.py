@@ -94,10 +94,31 @@ flickr30k_dir = data_root / "raw" / INPUT_DATASET
 output_dir = data_root / "processed" / INPUT_DATASET
 
 # Validate flickr30k data exists
-if not flickr30k_dir.exists():
-    raise FileNotFoundError(
-        f"Flickr30k data not found at {flickr30k_dir}. " "Please run download_data task first."
-    )
+if ENVIRONMENT == "local":
+    # Local: Check if unzipped dataset exists
+    if not flickr30k_dir.exists():
+        raise FileNotFoundError(
+            f"Flickr30k data not found at {flickr30k_dir}. " "Please run download_data task first."
+        )
+
+    annotations_file = flickr30k_dir / "annotations" / "dataset_flickr30k.json"
+    if not annotations_file.exists():
+        raise FileNotFoundError(
+            f"Flickr30k annotations not found at {annotations_file}. " "Dataset may be incomplete."
+        )
+
+elif ENVIRONMENT == "colab":
+    # Colab: Check if zip file exists on Drive
+    flickr30k_zip = flickr30k_dir.parent / "flickr30k.zip"
+
+    if not flickr30k_zip.exists():
+        raise FileNotFoundError(
+            f"Flickr30k zip not found on Drive: {flickr30k_zip}\n"
+            "Please run download_data task with output_storage='drive' first, "
+            "or manually upload flickr30k.zip to Drive."
+        )
+
+    logger.info(f"✓ Found flickr30k.zip on Drive: {flickr30k_zip}")
 
 logger.info(f"Input: {flickr30k_dir}")
 logger.info(f"Output: {output_dir}")
