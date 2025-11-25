@@ -55,10 +55,6 @@ if DRIVE_DIR:
         DRIVE_DIR = DRIVE_DIR.resolve()
         DRIVE_DATA_DIR = DRIVE_DIR / DATA_FOLDER
         DRIVE_MODELS_DIR = DRIVE_DIR / MODELS_FOLDER
-
-        # Create directories if they don't exist (on mounted drive)
-        DRIVE_DATA_DIR.mkdir(parents=True, exist_ok=True)
-        DRIVE_MODELS_DIR.mkdir(parents=True, exist_ok=True)
     else:
         DRIVE_DIR = None
         DRIVE_DATA_DIR = None

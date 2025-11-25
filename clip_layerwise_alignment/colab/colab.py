@@ -84,13 +84,17 @@ def retrieve_and_unzip_data(
     """
     Extract dataset from Drive to Colab local storage (Colab only).
 
+    Handles both zip structures:
+    - With top folder: flickr30k.zip → flickr30k/images/, flickr30k/annotations/
+    - Without top folder: flickr30k.zip → images/, annotations/
+
     Args:
-        source_zip: Path to zip file on Drive (e.g., /content/drive/.../raw/flickr30k.zip)
+        source_zip: Path to zip file on Drive
         extract_to: Directory to extract to (default: /content/data/raw)
         dataset_name: Name of dataset folder (default: "flickr30k")
 
     Returns:
-        Path to extracted dataset on Colab local storage (e.g., /content/data/raw/flickr30k)
+        Path to extracted dataset on Colab local storage
     """
     logger.info("=" * 80)
     logger.info("Setting up dataset for Colab environment")
@@ -102,13 +106,12 @@ def retrieve_and_unzip_data(
             f"Please upload {dataset_name}.zip to Drive"
         )
 
-    # Destination paths
     extracted_dir = extract_to / dataset_name
 
     # Check if already extracted
     if extracted_dir.exists():
         num_files = len(list(extracted_dir.rglob("*")))
-        if num_files > 1000:  # Sanity check for Flickr30k
+        if num_files > 1000:
             logger.info(f"✓ Dataset already extracted at {extracted_dir}")
             logger.info(f"  Found {num_files} existing files")
             return extracted_dir
@@ -128,12 +131,30 @@ def retrieve_and_unzip_data(
 
         logger.info(f"✓ Copied in {copy_time:.1f}s ({file_size_mb/copy_time:.1f} MB/s)")
 
+        # Peek at zip structure (cheap!)
+        logger.info("Checking zip structure...")
+        with zipfile.ZipFile(temp_zip, "r") as zip_ref:
+            file_list = zip_ref.namelist()
+
+            # Check if top-level folder exists
+            has_top_folder = file_list[0].startswith(f"{dataset_name}/")
+            logger.info(f"  Zip has top-level '{dataset_name}/' folder: {has_top_folder}")
+            logger.info(f"  First file in zip: {file_list[0]}")
+
         # Extract
-        logger.info(f"Extracting to: {extract_to}")
         start = time.time()
 
-        with zipfile.ZipFile(temp_zip, "r") as zip_ref:
-            zip_ref.extractall(extract_to)
+        if has_top_folder:
+            # Extract to parent (zip contains flickr30k/ already)
+            logger.info(f"Extracting to: {extract_to}")
+            with zipfile.ZipFile(temp_zip, "r") as zip_ref:
+                zip_ref.extractall(extract_to)
+        else:
+            # Extract directly into dataset folder (zip has no top folder)
+            logger.info(f"Extracting to: {extracted_dir}")
+            extracted_dir.mkdir(parents=True, exist_ok=True)
+            with zipfile.ZipFile(temp_zip, "r") as zip_ref:
+                zip_ref.extractall(extracted_dir)
 
         extract_time = time.time() - start
         num_files = len(list(extracted_dir.rglob("*")))
