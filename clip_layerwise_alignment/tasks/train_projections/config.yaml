@@ -1,0 +1,42 @@
+# tasks/train_projections/config.yaml
+
+# Layer pair to train
+text_layer: 9
+image_layer: "final"
+
+# Training parameters (optional - defaults applied if missing)
+training_params:
+  optimizer: "adamw"
+  learning_rate: 0.0001
+  batch_size: 256
+  epochs: 50
+  weight_decay: 0.1
+  temperature: 0.07
+  learnable_temperature: true
+
+  # Scheduler params (optional)
+  use_scheduler: true
+  warmup_epochs: 2        # Linear warmup (default: 2)
+  plateau_epochs: 3       # Constant LR (default: 3)
+  warmup_start_factor: 0.1  # Start at 10% of base LR (default: 0.1)
+  
+  # Early stopping params (optional)
+  early_stopping_patience: 3
+  early_stopping_min_delta: 0.0001
+
+# Model architecture
+projection_type: "linear"  # "linear" or "mlp"
+use_layernorm: false       # Optional, defaults to false
+
+# Data
+dataset: "flickr30k"
+
+# Processing (optional - auto-detected if not specified)
+device: "cpu"          # Uncomment to force specific device
+# num_workers: 4
+
+# Paths
+checkpoints_subdir: "projections"
+
+# Environment (optional - defaults to "local")
+environment: "colab"

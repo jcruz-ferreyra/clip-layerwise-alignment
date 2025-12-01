@@ -85,6 +85,7 @@ def extract_features(ctx: ExtractFeaturesContext) -> None:
     logger.info("=" * 80)
     logger.info("Starting feature extraction process")
     logger.info("=" * 80)
+
     logger.info(f"Model: {ctx.model_name}")
     logger.info(f"Text layers: {ctx.text_layers}")
     logger.info(f"Image layers: {ctx.image_layers}")

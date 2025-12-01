@@ -330,7 +330,7 @@ def _save_flickr30k_features(img_features, txt_features, ctx, split):
         )
 
     # Step 3: Save each layer separately
-    output_dir = ctx.output_dir / f"flickr30k/{split}"
+    output_dir = ctx.output_dir / f"{split}"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # Save image features (repeated to match captions)
