@@ -35,7 +35,7 @@ def _run_training_loop(
         text_embed, image_embed = model(text_batch, image_batch)  # [N, 512], [N, 512]
 
         # Contrastive loss
-        logits = (image_embed @ text_embed.T) * model.temp        # [N, N]
+        logits = (image_embed @ text_embed.T) * model.temp        # [N, N] # Note that we used multiplying temperature parameter!!
         labels = torch.arange(len(text_batch), device=ctx.device) # [,N]
 
         loss_i2t = F.cross_entropy(logits, labels)

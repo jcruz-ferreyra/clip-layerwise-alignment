@@ -4,12 +4,12 @@ import copy
 import logging
 from typing import Any, Dict, List, Tuple
 
+from clip_layerwise_alignment.utils import create_projection_model
 import torch
 import torch.nn as nn
 
 from .dataset import create_contrastive_dataloader
 from .early_stopping import _create_early_stopping
-from .model import _create_projection_model
 from .optimizer import _create_optimizer
 from .scheduler import _create_scheduler
 from .training import _run_training_loop, _run_val_loop
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 # ============================================================================
-# Helper functions (will implement these next)
+# Helper functions
 # ============================================================================
 
 
@@ -107,6 +107,21 @@ def _load_features_for_pair(ctx: TrainProjectionsContext) -> Dict[str, Dict[str,
     logger.info("✓ Features loaded successfully")
 
     return features
+
+
+def _create_projection_model(ctx: TrainProjectionsContext):
+    """Create the projection model using context parameters"""
+    projection_model = create_projection_model(
+        text_layer=ctx.text_layer,
+        image_layer=ctx.image_layer,
+        projection_type=ctx.projection_type,
+        use_layernorm=ctx.use_layernorm,
+        learnable_temperature=ctx.training_params["learnable_temperature"],
+        initial_temperature=ctx.training_params["temperature"],
+        device=ctx.device,
+    )
+
+    return projection_model
 
 
 def _train_projection(
@@ -256,7 +271,7 @@ def _save_training_history(ctx: TrainProjectionsContext, history: List[Dict[str,
 
 
 # ============================================================================
-# Main public function (at bottom)
+# Main public function
 # ============================================================================
 
 

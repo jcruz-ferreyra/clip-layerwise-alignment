@@ -1,17 +1,12 @@
 # tasks/train_projections/train_projections.py
 
 import logging
-from pathlib import Path
-from typing import Any, Dict, Tuple
+from typing import Union
 
 import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.utils.data import DataLoader, Dataset
-from tqdm import tqdm
-
-from .types import TrainProjectionsContext
 
 logger = logging.getLogger(__name__)
 
@@ -105,7 +100,15 @@ def _create_single_projection(
     return nn.Sequential(*layers)
 
 
-def _create_projection_model(ctx: TrainProjectionsContext) -> nn.Module:
+def create_projection_model(
+    text_layer: Union[int, str],
+    image_layer: Union[int, str],
+    projection_type: str,
+    use_layernorm=False,
+    learnable_temperature: bool = False,
+    initial_temperature: bool = False,
+    device: str = "cpu",
+) -> nn.Module:
     """
     Create projection model based on layer pair configuration.
 
@@ -119,8 +122,8 @@ def _create_projection_model(ctx: TrainProjectionsContext) -> nn.Module:
     logger.info("Creating projection model...")
 
     # Determine which projections are needed
-    text_is_final = ctx.text_layer == "final"
-    image_is_final = ctx.image_layer == "final"
+    text_is_final = text_layer == "final"
+    image_is_final = image_layer == "final"
 
     # Both can't be final (nothing to train!)
     if text_is_final and image_is_final:
@@ -137,7 +140,7 @@ def _create_projection_model(ctx: TrainProjectionsContext) -> nn.Module:
     if not text_is_final:
         logger.info(f"  Creating text projection: {text_dim} → {shared_dim}")
         projections["text"] = _create_single_projection(
-            text_dim, shared_dim, ctx.projection_type, ctx.use_layernorm
+            text_dim, shared_dim, projection_type, use_layernorm
         )
     else:
         logger.info("  Text layer is final (no projection needed)")
@@ -146,7 +149,7 @@ def _create_projection_model(ctx: TrainProjectionsContext) -> nn.Module:
     if not image_is_final:
         logger.info(f"  Creating image projection: {image_dim} → {shared_dim}")
         projections["image"] = _create_single_projection(
-            image_dim, shared_dim, ctx.projection_type, ctx.use_layernorm
+            image_dim, shared_dim, projection_type, use_layernorm
         )
     else:
         logger.info("  Image layer is final (no projection needed)")
@@ -156,11 +159,11 @@ def _create_projection_model(ctx: TrainProjectionsContext) -> nn.Module:
     model = ProjectionWrapper(
         text_projection=projections["text"],
         image_projection=projections["image"],
-        learnable_temperature=ctx.training_params["learnable_temperature"],
-        initial_temperature=ctx.training_params["temperature"],
+        learnable_temperature=learnable_temperature,
+        initial_temperature=initial_temperature,
     )
 
-    model = model.to(ctx.device)
-    logger.info(f"✓ Projection model created on {ctx.device}")
+    model = model.to(device)
+    logger.info(f"✓ Projection model created on {device}")
 
     return model

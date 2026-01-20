@@ -1,7 +1,7 @@
 # tasks/train_projections/config.yaml
 
 # Layer pair to train
-text_layer: 9
+text_layer: 2
 image_layer: "final"
 
 # Training parameters (optional - defaults applied if missing)

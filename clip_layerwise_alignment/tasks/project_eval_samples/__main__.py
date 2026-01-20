@@ -36,19 +36,20 @@ script_config = load_config(CONFIG_PATH)
 # Validate config
 required_keys = [
     "layer_pairs",
+    "projection_type",
     "dataset",
     "eval_split",
     "projections_subdir",
-    "results_subdir",
 ]
 check_missing_keys(required_keys, script_config)
 
 # Parse config
 LAYER_PAIRS = script_config["layer_pairs"]
+PROJECTION_TYPE = script_config["projection_type"]
+USE_LAYERNORM = script_config.get("use_layernorm", False)
 DATASET = script_config["dataset"]
 EVAL_SPLIT = script_config["eval_split"]
 PROJECTIONS_SUBDIR = script_config["projections_subdir"]
-RESULTS_SUBDIR = script_config["results_subdir"]
 ENVIRONMENT = script_config.get("environment", "local")
 
 logger.info(f"Environment: {ENVIRONMENT}")
@@ -77,7 +78,7 @@ else:
 # Construct paths
 features_dir = data_root / "processed" / DATASET
 projections_dir = model_root / PROJECTIONS_SUBDIR
-output_dir = data_root / RESULTS_SUBDIR / DATASET
+output_dir = data_root / "results" / DATASET
 
 logger.info(f"Features: {features_dir}")
 logger.info(f"Projections: {projections_dir}")
@@ -87,8 +88,7 @@ logger.info(f"Output: {output_dir}")
 eval_features_dir = features_dir / EVAL_SPLIT
 if not eval_features_dir.exists():
     raise FileNotFoundError(
-        f"Eval features not found: {eval_features_dir}\n"
-        "Please run extract_features task first."
+        f"Eval features not found: {eval_features_dir}\n" "Please run extract_features task first."
     )
 
 if not projections_dir.exists():
@@ -105,6 +105,8 @@ context = ProjectEvalContext(
     features_dir=features_dir,
     projections_dir=projections_dir,
     output_dir=output_dir,
+    projection_type=PROJECTION_TYPE,
+    use_layernorm=USE_LAYERNORM,
     environment=ENVIRONMENT,
 )
 

@@ -1,0 +1,65 @@
+# tasks/project_eval_samples/config.yaml
+
+# Layer pairs to project (should match trained projections)
+layer_pairs:
+  - text_layer: 1
+    image_layer: "final"
+  - text_layer: 2
+    image_layer: "final"
+  - text_layer: 3
+    image_layer: "final"
+  - text_layer: 4
+    image_layer: "final"
+  - text_layer: 5
+    image_layer: "final"
+  - text_layer: 6
+    image_layer: "final"
+  - text_layer: 7
+    image_layer: "final"
+  - text_layer: 8
+    image_layer: "final"
+  - text_layer: 9
+    image_layer: "final"
+  - text_layer: 10
+    image_layer: "final"
+  - text_layer: 11
+    image_layer: "final"
+  - text_layer: 12
+    image_layer: "final"
+  - text_layer: "final"
+    image_layer: 1
+  - text_layer: "final"
+    image_layer: 2
+  - text_layer: "final"
+    image_layer: 3
+  - text_layer: "final"
+    image_layer: 4
+  - text_layer: "final"
+    image_layer: 5
+  - text_layer: "final"
+    image_layer: 6
+  - text_layer: "final"
+    image_layer: 7
+  - text_layer: "final"
+    image_layer: 8
+  - text_layer: "final"
+    image_layer: 9
+  - text_layer: "final"
+    image_layer: 10
+  - text_layer: "final"
+    image_layer: 11
+  - text_layer: "final"
+    image_layer: 12
+
+# Projection type
+projection_type: "linear"
+
+# Data
+dataset: "flickr30k"
+eval_split: "test"  # Which split to project
+
+# Paths
+projections_subdir: "projections"
+
+# Environment
+environment: "colab"
