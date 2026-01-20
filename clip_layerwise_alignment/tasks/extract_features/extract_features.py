@@ -1,14 +1,10 @@
 # tasks/extract_features/extract_features.py
 
-import json
 import logging
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, Tuple
 
-import torch
 import torch.nn as nn
-from torch.utils.data import DataLoader
-from tqdm import tqdm
 
 from clip_layerwise_alignment.colab import retrieve_and_unzip_data
 
@@ -17,11 +13,15 @@ from .flickr30k import (
     _extract_flickr30k_txt_features,
     _load_flickr30k_dataset,
 )
-from .flickr30k import _save_flickr30k_features  # ← ADD
+from .flickr30k import _save_flickr30k_features
 from .types import ExtractFeaturesContext
 
 logger = logging.getLogger(__name__)
 
+
+# ============================================================================
+# Helper functions
+# ============================================================================
 
 def _load_clip_model(ctx: ExtractFeaturesContext) -> Tuple[nn.Module, Any, Any]:
     """Load pretrained CLIP model and preprocessing functions."""
@@ -66,6 +66,10 @@ def _extract_features_for_split(
 
         logger.info(f"✓ {split} split complete")
 
+
+# ============================================================================
+# Main public function
+# ============================================================================
 
 def extract_features(ctx: ExtractFeaturesContext) -> None:
     """

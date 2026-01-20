@@ -5,7 +5,6 @@ from pathlib import Path
 import requests
 from tqdm import tqdm
 import zipfile
-import tarfile
 import shutil
 
 from .types import DownloadDataContext
@@ -14,9 +13,8 @@ logger = logging.getLogger(__name__)
 
 
 # ============================================================================
-# Helper functions (top to bottom in order they're called)
+# Helper functions
 # ============================================================================
-
 
 def _validate_output_directories(ctx: DownloadDataContext) -> None:
     """Ensure output directories exist and are writable."""
@@ -255,7 +253,6 @@ def _zip_dataset(dataset_dir: Path, dataset_name: str) -> None:
 # ============================================================================
 # Main public function
 # ============================================================================
-
 
 def download_data(ctx: DownloadDataContext) -> None:
     """

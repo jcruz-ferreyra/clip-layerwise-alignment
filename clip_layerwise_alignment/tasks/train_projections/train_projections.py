@@ -22,7 +22,6 @@ logger = logging.getLogger(__name__)
 # Helper functions
 # ============================================================================
 
-
 def _load_features_for_pair(ctx: TrainProjectionsContext) -> Dict[str, Dict[str, Any]]:
     """
     Load pre-extracted features for training and validation.
@@ -273,7 +272,6 @@ def _save_training_history(ctx: TrainProjectionsContext, history: List[Dict[str,
 # ============================================================================
 # Main public function
 # ============================================================================
-
 
 def train_projections(ctx: TrainProjectionsContext) -> None:
     """

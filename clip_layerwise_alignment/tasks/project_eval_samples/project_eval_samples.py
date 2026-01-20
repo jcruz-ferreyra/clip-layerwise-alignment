@@ -17,7 +17,6 @@ logger = logging.getLogger(__name__)
 # Helper functions
 # ============================================================================
 
-
 def _load_eval_features_for_pair(pair: Dict, ctx: ProjectEvalContext) -> Dict[str, torch.Tensor]:
     """
     Load evaluation features for the specified layer pair.
@@ -209,6 +208,10 @@ def _save_projected_embeddings(
     logger.info(f"✓ Saved: {output_path.name}")
     logger.info(f"  Size: {file_size_mb:.2f} MB")
 
+
+# ============================================================================
+# Main public function
+# ============================================================================
 
 def project_eval_samples(ctx: ProjectEvalContext) -> None:
     """
